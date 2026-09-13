@@ -25,7 +25,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
   @override
   void initState() {
     super.initState();
-    
+
     if (widget.expenseToEdit != null) {
       _titleController.text = widget.expenseToEdit!.title;
       _descriptionController.text = widget.expenseToEdit!.description ?? '';
@@ -64,7 +64,9 @@ class _NewExpensePageState extends State<NewExpensePage> {
         final expenseVM = context.read<ExpenseViewModel>();
         final amount = double.parse(_amountController.text);
         final title = _titleController.text;
-        final description = _descriptionController.text.isEmpty ? null : _descriptionController.text;
+        final description = _descriptionController.text.isEmpty
+            ? null
+            : _descriptionController.text;
 
         if (widget.expenseToEdit == null) {
           await expenseVM.addExpense(
@@ -91,9 +93,9 @@ class _NewExpensePageState extends State<NewExpensePage> {
         Navigator.pop(context);
       } catch (e) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Errore nel salvataggio: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Errore nel salvataggio: $e')));
       }
     }
   }
@@ -104,9 +106,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
     final isEditing = widget.expenseToEdit != null;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditing ? 'Modifica Spesa' : 'Nuova Spesa'),
-      ),
+      appBar: AppBar(title: Text(isEditing ? 'Modifica Spesa' : 'Nuova Spesa')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -116,22 +116,30 @@ class _NewExpensePageState extends State<NewExpensePage> {
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Titolo'),
-                validator: (value) => value == null || value.isEmpty ? 'Inserisci un titolo' : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Inserisci un titolo'
+                    : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(labelText: 'Descrizione (opzionale)'),
+                decoration: const InputDecoration(
+                  labelText: 'Descrizione (opzionale)',
+                ),
                 maxLines: 2,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _amountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 decoration: const InputDecoration(labelText: 'Importo (€)'),
                 validator: (value) {
-                  if (value == null || value.isEmpty) return 'Inserisci un importo';
-                  if (double.tryParse(value) == null) return 'Inserisci un numero valido';
+                  if (value == null || value.isEmpty)
+                    return 'Inserisci un importo';
+                  if (double.tryParse(value) == null)
+                    return 'Inserisci un numero valido';
                   return null;
                 },
               ),
@@ -140,17 +148,15 @@ class _NewExpensePageState extends State<NewExpensePage> {
                 value: _selectedCategory,
                 hint: const Text('Seleziona Categoria'),
                 items: catVM.categories.map((cat) {
-                  return DropdownMenuItem(
-                    value: cat,
-                    child: Text(cat.name),
-                  );
+                  return DropdownMenuItem(value: cat, child: Text(cat.name));
                 }).toList(),
                 onChanged: (cat) {
                   setState(() {
                     _selectedCategory = cat;
                   });
                 },
-                validator: (value) => value == null ? 'Seleziona una categoria' : null,
+                validator: (value) =>
+                    value == null ? 'Seleziona una categoria' : null,
               ),
               const SizedBox(height: 24),
               ElevatedButton(

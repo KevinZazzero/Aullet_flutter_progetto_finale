@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/profile_viewmodel.dart';
-import 'profile_view.dart'; // Importa la vista qui
+import 'profile_view.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ProfileViewModel>();
-    // Passa i dati alla vista grafica
+
     return ProfileView(vm: vm, nameCtrl: _nameCtrl);
   }
 }
